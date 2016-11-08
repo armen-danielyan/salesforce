@@ -1,0 +1,9 @@
+{
+  "mysql": {
+    "host": "localhost",
+    "user": "root",
+    "password": "",
+    "database": "salesforce",
+    "charset": "UTF8_GENERAL_CI"
+  }
+}
