@@ -9,7 +9,6 @@ var logger = require('morgan');
 var path = require('path');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-//var shortID = require('shortid');
 
 var route = require('./routes/route');
 var Model = require('./models/model');
@@ -68,27 +67,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', route.index);
 
+app.get('/signin', route.signIn);
+app.post('/signin', route.signInPost);
+
+app.get('/signup', route.signUp);
+app.post('/signup', route.signUpPost);
+
+app.get('/signout', route.signOut);
+
+app.get('/privacy', route.privacy);
+
 // app.get('/profile', route.profile);
 // app.post('/profile', route.profileSave);
-//
-// app.get('/signin', route.signIn);
-// app.post('/signin', route.signInPost);
-//
-// app.get('/signup', route.signUp);
-// app.post('/signup', route.signUpPost);
-//
-// app.get('/signout', route.signOut);
-//
-// app.get('/webhooks', route.webhooks);
-// app.post('/webhooks', route.webhooksPost);
-//
-// app.get('/auth/facebook', route.facebookAuth);
-// app.get('/auth/facebook/return', route.facebookAuthReturn);
-//
-// app.get('/authorize', route.authorize);
-//
-// app.get('/privacy', route.privacy);
-//
+
 // app.get('/settings', route.settings);
 // app.post('/settings', route.settingsPost);
 
