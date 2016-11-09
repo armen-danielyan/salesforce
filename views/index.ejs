@@ -1,7 +1,351 @@
 <% include ./partials/header %>
-<div class="row">
-    <div class="col-md-12">
-        <h3>Welcome <strong><%= user.username %></strong></h3>
+<body>
+
+<div class="container">
+
+    <div class="row">
+        <div class="twelve columns header blue">
+            <div class="logo"><a href="/"><img src="/img/logo.png"></a></div>
+            <p class="left">Client Portal</p>
+            <p class="right ">
+                <i class="fa fa-user margin5-right"></i>
+                <span class=""><%= user.username %></span>
+                <span class="light-blue margin10-left margin10-right">|</span>
+                <span><a class="text-white" href="/signout">Logout</a></span>
+            </p>
+        </div>
     </div>
+
+    <!-- END HEADER -->
+
+    <div class="row pad30">
+        <div class="six columns ">
+            <!-- <h1>My Case</h1> -->
+            <div class="panel ">
+                <header class="clearfix">
+                    <h2>Claim Title/#</h2>
+                    <!-- <a class="button right">Edit</a> -->
+                </header>
+                <div class="body">
+                    <div class="form">
+                        <div class="row form-line">
+                            <div class="three columns "><label>Status</label></div>
+                            <div class="nine columns "><p>Pre-Filing Phase</p></div>
+                        </div>
+                        <div class="row form-line">
+                            <div class="three columns "><label>Date Started</label></div>
+                            <div class="nine columns "><p>07/15/2016</p></div>
+                        </div>
+                        <div class="row form-line">
+                            <div class="three columns "><label>Location</label></div>
+                            <div class="nine columns "><p>St. George, UT</p></div>
+                        </div>
+                        <div class="row form-line">
+                            <div class="three columns "><label>Description</label></div>
+                            <div class="nine columns "><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent in elit non leo vehicula mattis nec at urna. Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p></div>
+                        </div>
+
+                        <h4>What's Needed</h4>
+                        <div class="row item">
+                            <div class="six columns"><p><i class="fa fa-file-text"></i> Document ABC</p></div>
+                            <div class="six columns align-right"><span>Due: 10/12/2016</span><a class="button right orange uploadBtn">Upload</a></div>
+                        </div>
+                        <div class="row item">
+                            <div class="six columns"><p><i class="fa fa-file-text"></i> Document DEF</p></div>
+                            <div class="six columns align-right"><span>Due: 10/12/2016</span><a class="button right orange uploadBtn">Upload</a></div>
+                        </div>
+
+                        <h4 class="margin10-top">Documents on File</h4>
+                        <div class="row item">
+                            <div class="six columns"><p><i class="fa fa-file-text"></i> Document 123</p></div>
+                            <div class="six columns align-right"><span>Added: 10/12/2016</span><a class="button right viewBtn">View</a></div>
+                        </div>
+                        <div class="row item">
+                            <div class="six columns"><p><i class="fa fa-file-text"></i> Document 456</p></div>
+                            <div class="six columns align-right"><span>Added: 10/12/2016</span><a class="button right viewBtn">View</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="six columns ">
+            <!-- <h1>Expense Account Balance</h1> -->
+            <div class="panel ">
+                <header class="clearfix">
+                    <h3>Expense Account Balance</h3>
+                    <a class="button right green payBtn">Pay</a>
+                </header>
+                <div class="body">
+                    <div class="form row">
+                        <div class="twelve columns margin10-top balanceBtn pointer">
+                            <h1 class="left">$350.00</h1>
+                            <span class="left margin10-left margin10-right">|</span>
+                            <p class="left font12 margin5-top"><a>View expense breakdown &raquo;</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <h1 class="margin30-top">My Information</h1> -->
+            <div class="panel margin40-top">
+                <header class="clearfix">
+                    <h3 style="margin-top:5px">My Contact Information</h3>
+                    <a class="button right editBtn">Edit</a>
+                </header>
+                <div class="body">
+                    <div class="form">
+                        <div class="row form-line">
+                            <div class="three columns "><label>Full Name</label></div>
+                            <div class="nine columns "><p><%= user.first_name %> <%= user.last_name %></p></div>
+                        </div>
+                        <div class="row form-line">
+                            <div class="three columns "><label>SSN#</label></div>
+                            <div class="nine columns "><p>xxx-xx-1234</p></div>
+                        </div>
+                        <div class="row form-line">
+                            <div class="three columns "><label>Birth date</label></div>
+                            <div class="nine columns "><p>04/24/1965</p></div>
+                        </div>
+                        <div class="row form-line">
+                            <div class="three columns "><label>Phone</label></div>
+                            <div class="nine columns "><p>(435) 123-4567</p></div>
+                            <div class="row form-line">
+                                <div class="three columns "><label>Email</label></div>
+                                <div class="nine columns "><p><%= user.email %></p></div>
+                            </div>
+                            <div class="row form-line">
+                                <div class="three columns "><label>Address</label></div>
+                                <div class="nine columns ">
+                                    <p>123 N Main Street<br>
+                                        Apt 101b<br>
+                                        St. George, UT 85674</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- END Main Content -->
+
+</div>
+
+<div class="overlay hide"></div>
+
+<div class="modal hide" id="viewDoc">
+    <header class="clearfix">
+        <h1 class="left">Document ABC</h1>
+        <a class="button left orange">Download</a>
+        <i class="right fa fa-remove close"></i>
+
+    </header>
+
+    <div class="wrapper">
+        <div class="panel ">
+            <!--
+<header class="clearfix">
+                <h2>Document ABC</h2>
+                <a class="button right orange">Download</a>
+            </header>
+-->
+            <div class="body">
+                <embed src="img/form.png"  width="100%" />
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal hide" id="uploadDoc">
+    <header class="clearfix">
+        <h1 class="left">Upload Document</h1>
+        <!-- <a class="button left orange">Download</a> -->
+        <i class="right fa fa-remove close"></i>
+    </header>
+
+    <div class="wrapper">
+        <div class="panel small">
+            <header class="clearfix">
+                <h3 class="left">Select Files to Upload</h3>
+                <a class="button right orange">Select Files</a>
+            </header>
+            <div class="body nopad">
+                <div class="row itemFull">
+                    <div class="six columns">
+                        <p><i class="fa fa-file-text"></i> File name 123.pdf</p>
+                    </div>
+                    <div class="six columns align-right">
+                        <progress></progress>
+                        <i class="fa fa-times-circle text-orange"></i>
+                    </div>
+                </div>
+                <div class="row itemFull">
+                    <div class="six columns">
+                        <p><i class="fa fa-file-text"></i> File name 123.pdf</p>
+                    </div>
+                    <div class="six columns align-right">
+                        <progress></progress>
+                        <i class="fa fa-times-circle text-orange"></i>
+                    </div>
+                </div>
+                <div class="row itemFull">
+                    <div class="six columns">
+                        <p><i class="fa fa-file-text"></i> File name 123.pdf</p>
+                    </div>
+                    <div class="six columns align-right">
+                        <progress></progress>
+                        <i class="fa fa-times-circle text-orange"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal hide" id="balance">
+    <header class="clearfix">
+        <h1 class="left">Expense Account</h1>
+        <!-- <a class="button left orange">Download</a> -->
+        <i class="right fa fa-remove close"></i>
+    </header>
+
+    <div class="wrapper">
+        <div class="panel small">
+            <header class="clearfix">
+                <h3 class="left">Expense Account Ledger</h3>
+                <a class="button right green">Pay Now</a>
+            </header>
+            <div class="body nopad">
+                <div class="row itemFull expense">
+                    <div class="eight columns">
+                        <span class="date">10/13/2016</span>
+                        <span>Expense description here</span>
+
+                    </div>
+                    <div class="four columns align-right">
+                        <span class="status">Unpaid</span>
+                        <span class="amount">$150.00</span>
+                    </div>
+                </div>
+                <div class="row itemFull expense">
+                    <div class="eight columns">
+                        <span class="date">10/13/2016</span>
+                        <span>Expense description here</span>
+
+                    </div>
+                    <div class="four columns align-right">
+                        <span class="status">Unpaid</span>
+                        <span class="amount">$100.00</span>
+                    </div>
+                </div>
+                <div class="row itemFull expense">
+                    <div class="eight columns">
+                        <span class="date">10/13/2016</span>
+                        <span>Expense description here</span>
+
+                    </div>
+                    <div class="four columns align-right">
+                        <span class="status">Unpaid</span>
+                        <span class="amount">$100.00</span>
+                    </div>
+                </div>
+
+                <div class="row itemFull expense">
+                    <div class="eight columns">
+                        &nbsp;
+                    </div>
+                    <div class="four columns align-right">
+                        <span class="total">Balance:</span>
+                        <span class="amount">$350.00</span>
+                    </div>
+                </div>
+
+                <div class="row itemFull expense paid">
+                    <div class="eight columns">
+                        <span class="date">10/13/2016</span>
+                        <span>Expense description here</span>
+
+                    </div>
+                    <div class="four columns align-right">
+                        <span class="status">Paid</span>
+                        <span class="amount">$50.00</span>
+                    </div>
+                </div>
+                <div class="row itemFull expense paid">
+                    <div class="eight columns">
+                        <span class="date">10/13/2016</span>
+                        <span>Expense description here</span>
+
+                    </div>
+                    <div class="four columns align-right">
+                        <span class="status">Paid</span>
+                        <span class="amount">$200.00</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal hide" id="editInfo">
+    <header class="clearfix">
+        <h1 class="left">My Contact Information</h1>
+        <!-- <a class="button left orange">Download</a> -->
+        <i class="right fa fa-remove close"></i>
+    </header>
+
+    <div class="wrapper">
+        <div class="panel small">
+            <header class="clearfix">
+                <h3 class="left">Edit Current Contact Information</h3>
+                <a class="button right orange">Save</a>
+            </header>
+            <div class="body nopad">
+                <div class="">
+                    <div class="row form-line item">
+                        <div class="three columns "><label>Full Name</label></div>
+                        <div class="nine columns "><input type="text" value="John L. Smith"></div>
+                    </div>
+                    <div class="row form-line item">
+                        <div class="three columns "><label>SSN#</label></div>
+                        <div class="nine columns "><input type="text" value="xxx-xx-1234"></div>
+                    </div>
+                    <div class="row form-line item">
+                        <div class="three columns "><label>Birth date</label></div>
+                        <div class="nine columns "><input type="text" value="04/24/1965"></div>
+                    </div>
+                    <div class="row form-line item">
+                        <div class="three columns "><label>Phone</label></div>
+                        <div class="nine columns "><input type="text" value="(435) 123-4567"></div>
+                    </div>
+                    <div class="row form-line item">
+                        <div class="three columns "><label>Email</label></div>
+                        <div class="nine columns "><input type="email" value="j.smith123@yahoo.com"></div>
+                    </div>
+                    <div class="row form-line item">
+                        <div class="three columns "><label>Address</label></div>
+                        <div class="nine columns ">
+                            <input type="text" value="123 N Main Street"><br>
+                            <input type="text" value="Apt 101b"><br>
+                            <input  class="medium" type="text" value="St George">
+                            <select class="tiny"><option>UT</option></select>
+                            <input  class="small" type="text" value="84567">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+
 </div>
 <% include ./partials/footer %>

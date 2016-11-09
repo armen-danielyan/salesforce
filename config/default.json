@@ -5,5 +5,10 @@
     "password": "",
     "database": "salesforce",
     "charset": "UTF8_GENERAL_CI"
+  },
+  "salesforce": {
+    "clientID": "3MVG9uudbyLbNPZOgZq5ti80vLLofNaPhhEP5ZBS2ecKnqQSau.bmzGQ7qInXNmOzmOmvGIvLZSfrl3Mwyl1U",
+    "clientSecret": "3574797765221948060",
+    "callbackURL": "http://localhost:3000/auth/salesforce/return"
   }
 }
