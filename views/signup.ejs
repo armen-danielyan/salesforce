@@ -7,25 +7,29 @@
         <img class="margin30-top" src="img/logo.png">
 
         <div class="login">
-            <form id="form_login" method="post" action="/signin">
+            <form id="form_signup" method="post" action="/signup">
 
                 <% if(typeof(errorMessage) !== 'undefined') {%>
                 <span><%= errorMessage %></span>
                 <% } %>
 
+                <label>Full Name</label>
+                <input type="text" name="full_name" required>
+
                 <label>Username</label>
                 <input type="text" name="username" required>
+
+                <label>E-Mail</label>
+                <input type="email" name="email" required>
 
                 <label>Password</label>
                 <input type="password" name="password" required>
 
                 <br>
 
-                <a class="button orange margin20-top" id="submit_login" href="javascript: void(0)">Login</a>
-                <p class="margin20-top"><a href="/signup">Register</a></p>
+                <a class="button orange margin20-top" id="submit_signup" href="javascript: void(0)">Register</a>
+                <p class="margin20-top"><a href="/signin">Login</a></p>
                 <p class="margin20-top"><a href="/reset">Forgot Password</a></p>
-
-                <!--<a class="button orange margin20-top" href="/auth/salesforce">Login with SalesForce</a>-->
             </form>
         </div>
 

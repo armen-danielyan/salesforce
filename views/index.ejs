@@ -97,30 +97,28 @@
                     <div class="form">
                         <div class="row form-line">
                             <div class="three columns "><label>Full Name</label></div>
-                            <div class="nine columns "><p><%= user.first_name %> <%= user.last_name %></p></div>
+                            <div class="nine columns "><p><%= user.full_name %></p></div>
                         </div>
                         <div class="row form-line">
                             <div class="three columns "><label>SSN#</label></div>
-                            <div class="nine columns "><p>xxx-xx-1234</p></div>
+                            <div class="nine columns "><p><%= user.SSN %></p></div>
                         </div>
                         <div class="row form-line">
                             <div class="three columns "><label>Birth date</label></div>
-                            <div class="nine columns "><p>04/24/1965</p></div>
+                            <div class="nine columns "><p><%= user.birth_date %></p></div>
                         </div>
                         <div class="row form-line">
                             <div class="three columns "><label>Phone</label></div>
-                            <div class="nine columns "><p>(435) 123-4567</p></div>
-                            <div class="row form-line">
-                                <div class="three columns "><label>Email</label></div>
-                                <div class="nine columns "><p><%= user.email %></p></div>
-                            </div>
-                            <div class="row form-line">
-                                <div class="three columns "><label>Address</label></div>
-                                <div class="nine columns ">
-                                    <p>123 N Main Street<br>
-                                        Apt 101b<br>
-                                        St. George, UT 85674</p>
-                                </div>
+                            <div class="nine columns "><p><%= user.phone %></p></div>
+                        </div>
+                        <div class="row form-line">
+                            <div class="three columns "><label>Email</label></div>
+                            <div class="nine columns "><p><%= user.email %></p></div>
+                        </div>
+                        <div class="row form-line">
+                            <div class="three columns "><label>Address</label></div>
+                            <div class="nine columns ">
+                                <p><%= user.address %><br><%= user.apartment %><br><%= user.city %> <%= user.state %> <%= user.zip %></p>
                             </div>
                         </div>
                     </div>
@@ -128,10 +126,10 @@
             </div>
         </div>
     </div>
-
+</div>
     <!-- END Main Content -->
 
-</div>
+
 
 <div class="overlay hide"></div>
 
@@ -304,38 +302,91 @@
         <div class="panel small">
             <header class="clearfix">
                 <h3 class="left">Edit Current Contact Information</h3>
-                <a class="button right orange">Save</a>
+                <a class="button right orange" id="save-contact-info">Save</a>
             </header>
             <div class="body nopad">
                 <div class="">
                     <div class="row form-line item">
                         <div class="three columns "><label>Full Name</label></div>
-                        <div class="nine columns "><input type="text" value="John L. Smith"></div>
+                        <div class="nine columns "><input id="contact_full_name" type="text" value="<%= user.full_name %>"></div>
                     </div>
                     <div class="row form-line item">
                         <div class="three columns "><label>SSN#</label></div>
-                        <div class="nine columns "><input type="text" value="xxx-xx-1234"></div>
+                        <div class="nine columns "><input id="contact_SSN" type="text" value="<%= user.SSN %>"></div>
                     </div>
                     <div class="row form-line item">
                         <div class="three columns "><label>Birth date</label></div>
-                        <div class="nine columns "><input type="text" value="04/24/1965"></div>
+                        <div class="nine columns "><input id="contact_birth_date" type="text" value="<%= user.birth_date %>"></div>
                     </div>
                     <div class="row form-line item">
                         <div class="three columns "><label>Phone</label></div>
-                        <div class="nine columns "><input type="text" value="(435) 123-4567"></div>
+                        <div class="nine columns "><input id="contact_phone" type="text" value="<%= user.phone %>"></div>
                     </div>
                     <div class="row form-line item">
                         <div class="three columns "><label>Email</label></div>
-                        <div class="nine columns "><input type="email" value="j.smith123@yahoo.com"></div>
+                        <div class="nine columns "><input id="contact_email" type="email" value="<%= user.email %>"></div>
                     </div>
                     <div class="row form-line item">
                         <div class="three columns "><label>Address</label></div>
                         <div class="nine columns ">
-                            <input type="text" value="123 N Main Street"><br>
-                            <input type="text" value="Apt 101b"><br>
-                            <input  class="medium" type="text" value="St George">
-                            <select class="tiny"><option>UT</option></select>
-                            <input  class="small" type="text" value="84567">
+                            <input id="contact_address" type="text" value="<%= user.address %>"><br>
+                            <input id="contact_apartment" type="text" value="<%= user.apartment %>"><br>
+                            <input id="contact_city" class="medium" type="text" value="<%= user.city %>">
+                            <select id="contact_state" class="tiny">
+                                <option value="" <% if(user.state == "") { %> selected="selected" <% } %>></option>
+                                <option value="AL" <% if(user.state == "AL") { %> selected="selected" <% } %>>AL</option>
+                                <option value="AK" <% if(user.state == "AK") { %> selected="selected" <% } %>>AK</option>
+                                <option value="AZ" <% if(user.state == "AZ") { %> selected="selected" <% } %>>AZ</option>
+                                <option value="AR" <% if(user.state == "AR") { %> selected="selected" <% } %>>AR</option>
+                                <option value="CA" <% if(user.state == "CA") { %> selected="selected" <% } %>>CA</option>
+                                <option value="CO" <% if(user.state == "CO") { %> selected="selected" <% } %>>CO</option>
+                                <option value="CT" <% if(user.state == "CT") { %> selected="selected" <% } %>>CT</option>
+                                <option value="DE" <% if(user.state == "DE") { %> selected="selected" <% } %>>DE</option>
+                                <option value="DC" <% if(user.state == "DC") { %> selected="selected" <% } %>>DC</option>
+                                <option value="FL" <% if(user.state == "FL") { %> selected="selected" <% } %>>FL</option>
+                                <option value="GA" <% if(user.state == "GA") { %> selected="selected" <% } %>>GA</option>
+                                <option value="HI" <% if(user.state == "HI") { %> selected="selected" <% } %>>HI</option>
+                                <option value="ID" <% if(user.state == "ID") { %> selected="selected" <% } %>>ID</option>
+                                <option value="IL" <% if(user.state == "IL") { %> selected="selected" <% } %>>IL</option>
+                                <option value="IN" <% if(user.state == "IN") { %> selected="selected" <% } %>>IN</option>
+                                <option value="IA" <% if(user.state == "IA") { %> selected="selected" <% } %>>IA</option>
+                                <option value="KS" <% if(user.state == "KS") { %> selected="selected" <% } %>>KS</option>
+                                <option value="KY" <% if(user.state == "KY") { %> selected="selected" <% } %>>KY</option>
+                                <option value="LA" <% if(user.state == "LA") { %> selected="selected" <% } %>>LA</option>
+                                <option value="ME" <% if(user.state == "ME") { %> selected="selected" <% } %>>ME</option>
+                                <option value="MD" <% if(user.state == "MD") { %> selected="selected" <% } %>>MD</option>
+                                <option value="MA" <% if(user.state == "MA") { %> selected="selected" <% } %>>MA</option>
+                                <option value="MI" <% if(user.state == "MI") { %> selected="selected" <% } %>>MI</option>
+                                <option value="MN" <% if(user.state == "MN") { %> selected="selected" <% } %>>MN</option>
+                                <option value="MS" <% if(user.state == "MS") { %> selected="selected" <% } %>>MS</option>
+                                <option value="MO" <% if(user.state == "MO") { %> selected="selected" <% } %>>MO</option>
+                                <option value="MT" <% if(user.state == "MT") { %> selected="selected" <% } %>>MT</option>
+                                <option value="NE" <% if(user.state == "NE") { %> selected="selected" <% } %>>NE</option>
+                                <option value="NV" <% if(user.state == "NV") { %> selected="selected" <% } %>>NV</option>
+                                <option value="NH" <% if(user.state == "NH") { %> selected="selected" <% } %>>NH</option>
+                                <option value="NJ" <% if(user.state == "NJ") { %> selected="selected" <% } %>>NJ</option>
+                                <option value="NM" <% if(user.state == "NM") { %> selected="selected" <% } %>>NM</option>
+                                <option value="NY" <% if(user.state == "NY") { %> selected="selected" <% } %>>NY</option>
+                                <option value="NC" <% if(user.state == "NC") { %> selected="selected" <% } %>>NC</option>
+                                <option value="ND" <% if(user.state == "ND") { %> selected="selected" <% } %>>ND</option>
+                                <option value="OH" <% if(user.state == "OH") { %> selected="selected" <% } %>>OH</option>
+                                <option value="OK" <% if(user.state == "OK") { %> selected="selected" <% } %>>OK</option>
+                                <option value="OR" <% if(user.state == "OR") { %> selected="selected" <% } %>>OR</option>
+                                <option value="PA" <% if(user.state == "PA") { %> selected="selected" <% } %>>PA</option>
+                                <option value="RI" <% if(user.state == "RI") { %> selected="selected" <% } %>>RI</option>
+                                <option value="SC" <% if(user.state == "SC") { %> selected="selected" <% } %>>SC</option>
+                                <option value="SD" <% if(user.state == "SD") { %> selected="selected" <% } %>>SD</option>
+                                <option value="TN" <% if(user.state == "TN") { %> selected="selected" <% } %>>TN</option>
+                                <option value="TX" <% if(user.state == "TX") { %> selected="selected" <% } %>>TX</option>
+                                <option value="UT" <% if(user.state == "UT") { %> selected="selected" <% } %>>UT</option>
+                                <option value="VT" <% if(user.state == "VT") { %> selected="selected" <% } %>>VT</option>
+                                <option value="VA" <% if(user.state == "VA") { %> selected="selected" <% } %>>VA</option>
+                                <option value="WA" <% if(user.state == "WA") { %> selected="selected" <% } %>>WA</option>
+                                <option value="WV" <% if(user.state == "WV") { %> selected="selected" <% } %>>WV</option>
+                                <option value="WI" <% if(user.state == "WI") { %> selected="selected" <% } %>>WI</option>
+                                <option value="WY" <% if(user.state == "WY") { %> selected="selected" <% } %>>WY</option>
+                            </select>
+                            <input id="contact_zip" class="small" type="text" value="<%= user.zip %>">
                         </div>
                     </div>
                 </div>
@@ -348,4 +399,5 @@
 
 
 </div>
+
 <% include ./partials/footer %>

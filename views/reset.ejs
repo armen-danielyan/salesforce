@@ -1,0 +1,28 @@
+<% include ./partials/header %>
+<body class="blue">
+
+<div class="row align-center">
+    <div class="twelve columns">
+
+        <img class="margin30-top" src="img/logo.png">
+
+        <div class="login">
+            <form id="form_reset" method="post" action="/reset">
+
+                <% if(typeof(errorMessage) !== 'undefined') {%>
+                <span><%= errorMessage %></span>
+                <% } %>
+
+                <label>Email</label>
+                <input type="email" name="email" required>
+
+                <br>
+
+                <a class="button orange margin20-top" id="submit_reset" href="javascript: void(0)">Reset Password</a>
+                <p class="margin20-top"><a href="/signin">Login</a> / <a href="/signup">Register</a></p>
+            </form>
+        </div>
+
+    </div>
+</div>
+<% include ./partials/footer %>

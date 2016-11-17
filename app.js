@@ -17,7 +17,7 @@ var Model = require('./models/model');
 
 var app = express();
 
-/*passport.use(new LocalStrategy(
+passport.use(new LocalStrategy(
     function (username, password, done) {
         new Model.User({username: username})
             .fetch()
@@ -35,32 +35,48 @@ var app = express();
                 }
             });
     }
-));*/
+));
 
 passport.use(new SalesforceStrategy(
     config.get('salesforce'),
     function(accessToken, refreshToken, profile, done) {
+        var instanceURLRgx = /([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/;
+        console.log(profile);
+        console.log('AT: '+ accessToken);
+        // console.log('RT: '+ refreshToken);
         new Model.User({sf_userID: profile.user_id})
             .fetch()
             .then(function(data){
                 var user = data;
                 if (user === null) {
                     new Model.User({
+                        sf_userID: profile.user_id,
+                        sf_organisationID: profile.organization_id,
                         username: profile.nickname,
-                        password: bcrypt.hashSync(shortID.generate()),
-                        email: profile.email,
+                        full_name: profile.name,
                         first_name: profile.given_name,
                         last_name: profile.family_name,
-                        sf_userID: profile.user_id
-                    }).save().then(function(model){
-                        user = model.toJSON();
-                        return done(null, user);
-                    });
+                        email: profile.email,
+                        sf_accessToken: accessToken,
+                        sf_refreshToken: refreshToken,
+                        sf_instanceURL: 'https://' + instanceURLRgx.exec(profile.urls.query)[0]
+                    })
+                        .save()
+                        .then(function(model){
+                            user = model.toJSON();
+                            return done(null, user);
+                        });
                 } else {
-                    user = data.toJSON();
-                    return done(null, user);
+                    new Model.User({ID: user.toJSON().ID})
+                        .save({
+                            sf_accessToken: accessToken
+                        }, {patch: true})
+                        .then(function(){
+                            user = data.toJSON();
+                            return done(null, user);
+                        });
                 }
-        });
+            });
     }
 ));
 
@@ -98,9 +114,16 @@ app.use(express.static(path.join(__dirname, 'public')));
  */
 
 app.get('/', route.index);
+app.post('/', route.indexPost);
 
 app.get('/signin', route.signIn);
 app.post('/signin', route.signInPost);
+
+app.get('/signup', route.signUp);
+app.post('/signup', route.signUpPost);
+
+app.get('/reset', route.reset);
+app.post('/reset', route.resetPost);
 
 app.get('/signout', route.signOut);
 

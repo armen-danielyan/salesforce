@@ -1,0 +1,50 @@
+<% include ./partials/header %>
+<body>
+
+<div class="container">
+
+    <div class="row">
+        <div class="twelve columns header blue">
+            <div class="logo"><a href="/"><img src="/img/logo.png"></a></div>
+            <p class="left">Client Portal</p>
+            <p class="right ">
+                <i class="fa fa-user margin5-right"></i>
+                <span class=""><%= user.username %></span>
+                <span class="light-blue margin10-left margin10-right">|</span>
+                <span><a class="text-white" href="/signout">Logout</a></span>
+            </p>
+        </div>
+    </div>
+
+    <% if(typeof(errorMessage) !== 'undefined') {%>
+    <span><%= errorMessage %></span>
+    <% } %>
+
+    <!-- END HEADER -->
+    <div class="row pad30">
+        <div class="twelve columns">
+            <div class="panel ">
+                <header class="clearfix">
+                    <h2>Message</h2>
+                </header>
+
+                <div class="body">
+                    <div class="form">
+                        <div class="row form-line">
+                            <div class="three columns "><label>Status</label></div>
+                            <div class="nine columns "><p>Dear <strong><%= user.full_name %></strong>, your Email address(<strong><%= user.email %></strong>) does not exist in our SalesForce Contacts List. Please contact us for more information.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- END Main Content -->
+
+</div>
+
+<div class="overlay hide"></div>
+
+<% include ./partials/footer %>
