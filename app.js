@@ -37,13 +37,15 @@ passport.use(new LocalStrategy(
     }
 ));
 
-passport.use(new SalesforceStrategy(
+/*passport.use(new SalesforceStrategy(
     config.get('salesforce'),
     function(accessToken, refreshToken, profile, done) {
         var instanceURLRgx = /([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/;
         console.log(profile);
         console.log('AT: '+ accessToken);
-        // console.log('RT: '+ refreshToken);
+        console.log('RT: '+ refreshToken);
+
+
         new Model.User({sf_userID: profile.user_id})
             .fetch()
             .then(function(data){
@@ -52,11 +54,11 @@ passport.use(new SalesforceStrategy(
                     new Model.User({
                         sf_userID: profile.user_id,
                         sf_organisationID: profile.organization_id,
-                        username: profile.nickname,
-                        full_name: profile.name,
+                        //username: profile.nickname,
+                        //full_name: profile.name,
                         first_name: profile.given_name,
                         last_name: profile.family_name,
-                        email: profile.email,
+                        //email: profile.email,
                         sf_accessToken: accessToken,
                         sf_refreshToken: refreshToken,
                         sf_instanceURL: 'https://' + instanceURLRgx.exec(profile.urls.query)[0]
@@ -69,7 +71,8 @@ passport.use(new SalesforceStrategy(
                 } else {
                     new Model.User({ID: user.toJSON().ID})
                         .save({
-                            sf_accessToken: accessToken
+                            sf_accessToken: accessToken,
+                            sf_refreshToken: refreshToken
                         }, {patch: true})
                         .then(function(){
                             user = data.toJSON();
@@ -78,7 +81,7 @@ passport.use(new SalesforceStrategy(
                 }
             });
     }
-));
+));*/
 
 passport.serializeUser(function (user, done) {
     done(null, user.username);
@@ -129,6 +132,9 @@ app.get('/signout', route.signOut);
 
 app.get('/auth/salesforce', route.salesforceAuth);
 app.get('/auth/salesforce/return', route.salesforceReturn);
+
+app.get('/auth/netdocuments', route.netdocuments);
+app.get('/auth/netdocuments/return', route.netdocumentsReturn);
 
 app.use(route.notFound404);
 

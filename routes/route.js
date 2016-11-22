@@ -3,8 +3,12 @@ var bcrypt = require('bcrypt-nodejs');
 var config = require('config');
 var jsforce = require('jsforce');
 var validator = require('validator');
+var request = require('request');
 
 var Model = require('../models/model');
+
+var jsforceOAuth2 = new jsforce.OAuth2(config.get('jsforce'));
+
 
 var index = function (req, res, next) {
 
@@ -36,14 +40,14 @@ var index = function (req, res, next) {
         conn.login(connCreds.username, connCreds.password + connCreds.clientsecret, function(err, userInfo) {
             if (err) { return console.error(err); }
 
-            console.log("User ID: " + userInfo.id);
-            console.log("Org ID: " + userInfo.organizationId);
+            // console.log("User ID: " + userInfo.id);
+            // console.log("Org ID: " + userInfo.organizationId);
 
-            conn.query("SELECT Id, Name, Email FROM Contact WHERE Email = '"+ user.email + "'", function(err, result) {
+            conn.query("SELECT Id, Name, Email FROM Contact WHERE Email = '" + user.email + "'", function(err, result) {
                 if (err) { return console.error(err); }
-                console.log("total : " + result.totalSize);
-                console.log("fetched : " + result.records.length);
-                console.log(result.records);
+                // console.log("total : " + result.totalSize);
+                // console.log("fetched : " + result.records.length);
+                // console.log(result.records);
 
                 if(result.records.length > 0) {
                     res.render('index', {title: 'Home', user: user});
@@ -91,6 +95,7 @@ var indexPost = function (req, res, next) {
 var signIn = function (req, res, next) {
     if (req.isAuthenticated())
         res.redirect('/');
+
     res.render('signin', {title: 'Sign In'});
 };
 
@@ -155,7 +160,8 @@ var signUpPost = function (req, res, next) {
 
 var signOut = function (req, res, next) {
     if (!req.isAuthenticated()) {
-        notFound404(req, res, next);
+        res.redirect('/signin');
+        //notFound404(req, res, next);
     } else {
         req.logout();
         res.redirect('/signin');
@@ -204,11 +210,13 @@ var notFound404 = function (req, res, next) {
 };
 
 var salesforceAuth = function (req, res, next){
-    passport.authenticate('salesforce', {session: true})(req, res, next);
+    /*passport.authenticate('salesforce', {session: true})(req, res, next);*/
+
+    res.redirect(jsforceOAuth2.getAuthorizationUrl({ scope : 'api id web refresh_token' }));
 };
 
 var salesforceReturn = function (req, res, next){
-    passport.authenticate('salesforce', {session: true}, function(err, user, info) {
+    /*passport.authenticate('salesforce', {session: true}, function(err, user, info) {
         if (err) {
             return res.render('signin', {title: 'Sign In', errorMessage: err.message});
         }
@@ -222,7 +230,57 @@ var salesforceReturn = function (req, res, next){
                 return res.redirect('/');
             }
         });
-    })(req, res, next)
+    })(req, res, next)*/
+
+    if (!req.isAuthenticated()) {
+        res.redirect('/signin');
+    } else {
+
+        var user = req.user;
+
+        console.log(user);
+
+        var conn = new jsforce.Connection({oauth2: jsforceOAuth2});
+        var code = req.param('code');
+        conn.authorize(code, function (err, userInfo) {
+            if (err) {
+                return console.error(err);
+            }
+
+            new Model.User({ID: user.toJSON().ID})
+                .save({
+                    sf_accessToken: conn.accessToken,
+                    sf_refreshToken: conn.refreshToken,
+                    sf_instanceURL: conn.instanceUrl,
+                    sf_userID: userInfo.id,
+                    sf_organisationID: userInfo.organizationId
+                }, {patch: true})
+                .then(function(model){
+                    console.log(model);
+                    return res.redirect('/');
+                });
+
+        });
+    }
+};
+
+var netdocuments = function (req, res, next){
+    if (!req.isAuthenticated()) {
+        res.redirect('/signin');
+    } else {
+        var qs = {
+            uri: 'https://vault.netvoyage.com/neWeb2/OAuth.aspx',
+            client_id: 'AP-JABQEXA5',
+            scope: 'full',
+            response_type: 'token',
+            redirect_uri: 'http://localhost:3000/auth/netdocuments/return'
+        };
+        res.redirect(qs.uri + '?client_id=' + qs.client_id + '&scope=' + qs.scope + '&response_type=' + qs.response_type + '&redirect_uri=' + qs.redirect_uri);
+    }
+};
+
+var netdocumentsReturn = function (req, res, next){
+    console.log(req);
 };
 
 
@@ -246,5 +304,8 @@ module.exports.signOut = signOut;
 
 module.exports.salesforceAuth = salesforceAuth;
 module.exports.salesforceReturn = salesforceReturn;
+
+module.exports.netdocuments = netdocuments;
+module.exports.netdocumentsReturn = netdocumentsReturn;
 
 module.exports.notFound404 = notFound404;
