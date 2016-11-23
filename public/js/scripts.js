@@ -66,5 +66,24 @@ $(document).ready(function () {
         });
     });
 
+    $("#sf-connect").on("click", function(){
+        if($(this).data("status") == "connected"){
+            $.ajax({
+                url: "/",
+                type: "post",
+                data: {
+                    action: "salesforce_disconnect",
+
+                    id: $(this).data("id")
+
+                },
+                success: function(data){
+                    console.log(data);
+                    location.reload();
+                }
+            })
+        }
+    });
+
 
 });

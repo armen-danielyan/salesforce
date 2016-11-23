@@ -22,32 +22,14 @@ var index = function (req, res, next) {
             user = user.toJSON();
         }
 
-        /*console.log(user.sf_accessToken);
-        var conn = new jsforce.Connection({
-            instanceUrl : user.sf_instanceURL,
-            accessToken : user.sf_accessToken
-        });
-        conn.query("SELECT Id, Name FROM Account", function(err, result) {
-            if (err) { return console.error(err); }
-            console.log("total : " + result.totalSize);
-            console.log("fetched : " + result.records.length);
-        });*/
+        var conn = new jsforce.Connection({oauth2 : jsforceOAuth2});
 
-        var conn = new jsforce.Connection({
-            oauth2 : config.get('salesforce')
-        });
         var connCreds = config.get('sfadmin');
         conn.login(connCreds.username, connCreds.password + connCreds.clientsecret, function(err, userInfo) {
             if (err) { return console.error(err); }
 
-            // console.log("User ID: " + userInfo.id);
-            // console.log("Org ID: " + userInfo.organizationId);
-
             conn.query("SELECT Id, Name, Email FROM Contact WHERE Email = '" + user.email + "'", function(err, result) {
                 if (err) { return console.error(err); }
-                // console.log("total : " + result.totalSize);
-                // console.log("fetched : " + result.records.length);
-                // console.log(result.records);
 
                 if(result.records.length > 0) {
                     res.render('index', {title: 'Home', user: user});
@@ -56,6 +38,40 @@ var index = function (req, res, next) {
                 }
             });
         });
+
+
+        /**
+         * Refresh access token
+         */
+        if(user.sf_accessToken) {
+            var conn2 = new jsforce.Connection({
+                oauth2: jsforceOAuth2,
+                instanceUrl: user.sf_instanceURL,
+                accessToken: user.sf_accessToken,
+                refreshToken: user.sf_refreshToken
+            });
+            conn2.on("refresh", function (accessToken, res) {
+                new Model.User({ID: user.ID})
+                    .save({
+                        sf_accessToken: accessToken
+                    }, {patch: true})
+                    .then(function (model) {
+                        console.log(model);
+                    });
+                console.log(accessToken);
+                console.log(res);
+            });
+
+            conn2.chatter.resource('/users/me').retrieve(function (err, res) {
+                if (err) {
+                    return console.error(err);
+                }
+                console.log("username: " + res.username);
+                console.log("email: " + res.email);
+                console.log("small photo url: " + res.photo.smallPhotoUrl);
+            });
+        }
+
 
     }
 };
@@ -85,6 +101,20 @@ var indexPost = function (req, res, next) {
                     state       : req.body.contact_state,
                     zip         : req.body.contact_zip
                 })
+                .then(function(model){
+                    res.json({"status":"OK", "msg":"Satatus Message"});
+                })
+        }
+
+        if(req.body.action == 'salesforce_disconnect') {
+            new Model.User({ID: req.body.id})
+                .save({
+                    sf_accessToken: '',
+                    sf_refreshToken: '',
+                    sf_instanceURL: '',
+                    sf_userID: '',
+                    sf_organisationID: ''
+                }, {patch: true})
                 .then(function(model){
                     res.json({"status":"OK", "msg":"Satatus Message"});
                 })
@@ -210,27 +240,10 @@ var notFound404 = function (req, res, next) {
 };
 
 var salesforceAuth = function (req, res, next){
-    /*passport.authenticate('salesforce', {session: true})(req, res, next);*/
-
     res.redirect(jsforceOAuth2.getAuthorizationUrl({ scope : 'api id web refresh_token' }));
 };
 
 var salesforceReturn = function (req, res, next){
-    /*passport.authenticate('salesforce', {session: true}, function(err, user, info) {
-        if (err) {
-            return res.render('signin', {title: 'Sign In', errorMessage: err.message});
-        }
-        if (!user) {
-            return res.render('signin', {title: 'Sign In', errorMessage: info.message});
-        }
-        return req.logIn(user, function (err) {
-            if (err) {
-                return res.render('signin', {title: 'Sign In', errorMessage: err.message});
-            } else {
-                return res.redirect('/');
-            }
-        });
-    })(req, res, next)*/
 
     if (!req.isAuthenticated()) {
         res.redirect('/signin');
@@ -238,10 +251,9 @@ var salesforceReturn = function (req, res, next){
 
         var user = req.user;
 
-        console.log(user);
-
         var conn = new jsforce.Connection({oauth2: jsforceOAuth2});
-        var code = req.param('code');
+        var code = req.query.code;
+
         conn.authorize(code, function (err, userInfo) {
             if (err) {
                 return console.error(err);

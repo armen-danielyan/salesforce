@@ -132,12 +132,12 @@
                 </header>
                 <div class="body">
                     <div class="form">
-                        <div class="row form-line">
-                            <div class="three columns "><label>SalesForce</label></div>
-                            <div class="nine columns "><a href="/auth/salesforce" class="button left blue">Connect</a></div>
+                        <div class="row item">
+                            <div class="three columns "><p>SalesForce</p></div>
+                            <div class="nine columns "><a id="sf-connect" data-id="<%= user.ID; %>" data-status="<% if(user.sf_accessToken) { %>connected<% } %>" href="<% if(user.sf_accessToken) { %>#<% } else { %>/auth/salesforce<% } %>" class="button left blue"><% if(user.sf_accessToken) { %>Disconnect<% } else { %>Connect<% } %></a></div>
                         </div>
-                        <div class="row form-line">
-                            <div class="three columns "><label>NetDocuments</label></div>
+                        <div class="row item">
+                            <div class="three columns "><p>NetDocuments</p></div>
                             <div class="nine columns "><a href="/auth/netdocuments" class="button left blue">Connect</a></div>
                         </div>
                     </div>
