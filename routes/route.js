@@ -4,6 +4,7 @@ var config = require('config');
 var jsforce = require('jsforce');
 var validator = require('validator');
 var request = require('request');
+var debug = require('debug')('route');
 
 var Model = require('../models/model');
 
@@ -67,8 +68,6 @@ var index = function (req, res, next) {
                     return console.error(err);
                 }
                 console.log("username: " + res.username);
-                console.log("email: " + res.email);
-                console.log("small photo url: " + res.photo.smallPhotoUrl);
             });
         }
 
@@ -280,19 +279,18 @@ var netdocuments = function (req, res, next){
     if (!req.isAuthenticated()) {
         res.redirect('/signin');
     } else {
-        var qs = {
-            uri: 'https://vault.netvoyage.com/neWeb2/OAuth.aspx',
-            client_id: 'AP-JABQEXA5',
-            scope: 'full',
-            response_type: 'token',
-            redirect_uri: 'http://localhost:3000/auth/netdocuments/return'
-        };
+        var qs = config.get('netdocuments');
         res.redirect(qs.uri + '?client_id=' + qs.client_id + '&scope=' + qs.scope + '&response_type=' + qs.response_type + '&redirect_uri=' + qs.redirect_uri);
     }
 };
 
 var netdocumentsReturn = function (req, res, next){
-    console.log(req);
+    if (!req.isAuthenticated()) {
+        res.redirect('/signin');
+    } else {
+        console.log(req.query.access_token);
+        return res.redirect('/');
+    }
 };
 
 

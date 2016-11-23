@@ -6,19 +6,21 @@
     "database": "salesforce",
     "charset": "UTF8_GENERAL_CI"
   },
-  "salesforce": {
-    "clientID": "3MVG9uudbyLbNPZOgZq5ti80vLLofNaPhhEP5ZBS2ecKnqQSau.bmzGQ7qInXNmOzmOmvGIvLZSfrl3Mwyl1U",
+  "jsforce": {
+    "clientId": "3MVG9uudbyLbNPZOgZq5ti80vLLofNaPhhEP5ZBS2ecKnqQSau.bmzGQ7qInXNmOzmOmvGIvLZSfrl3Mwyl1U",
     "clientSecret": "3574797765221948060",
-    "callbackURL": "http://localhost:3000/auth/salesforce/return"
+    "redirectUri": "http://localhost:3000/auth/salesforce/return"
   },
   "sfadmin": {
     "username": "danielyan_armen@yahoo.com",
     "password": "Ye7884j9@",
     "clientsecret": "2WF5xUfmbr1Y15OL0PGXqsu6"
   },
-  "jsforce": {
-    "clientId": "3MVG9uudbyLbNPZOgZq5ti80vLLofNaPhhEP5ZBS2ecKnqQSau.bmzGQ7qInXNmOzmOmvGIvLZSfrl3Mwyl1U",
-    "clientSecret": "3574797765221948060",
-    "redirectUri": "http://localhost:3000/auth/salesforce/return"
+  "netdocuments": {
+    "uri": "https://vault.netvoyage.com/neWeb2/OAuth.aspx",
+    "client_id": "AP-JABQEXA5",
+    "scope": "full",
+    "response_type": "token",
+    "redirect_uri": "http://localhost:3000/auth/netdocuments/return"
   }
 }

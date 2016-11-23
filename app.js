@@ -7,10 +7,9 @@ var bcrypt = require('bcrypt-nodejs');
 var ejs = require('ejs');
 var logger = require('morgan');
 var path = require('path');
-var shortID = require('shortid');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var SalesforceStrategy = require('passport-salesforce').Strategy;
+var debug = require('debug')('app');
 
 var route = require('./routes/route');
 var Model = require('./models/model');
