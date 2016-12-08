@@ -97,7 +97,7 @@
                     <div class="form">
                         <div class="row form-line">
                             <div class="three columns "><label>Full Name</label></div>
-                            <div class="nine columns "><p><%= user.full_name %></p></div>
+                            <div class="nine columns "><p><%= user.first_name + ' ' + user.last_name%></p></div>
                         </div>
                         <div class="row form-line">
                             <div class="three columns "><label>SSN#</label></div>
@@ -118,7 +118,7 @@
                         <div class="row form-line">
                             <div class="three columns "><label>Address</label></div>
                             <div class="nine columns ">
-                                <p><%= user.address %><br><%= user.apartment %><br><%= user.city %> <%= user.state %> <%= user.zip %></p>
+                                <p><%= user.address %><br><%= user.city %> <%= user.state %> <%= user.zip %></p>
                             </div>
                         </div>
                     </div>
@@ -126,7 +126,7 @@
             </div>
 
 
-            <div class="panel margin40-top">
+            <!--<div class="panel margin40-top">
                 <header class="clearfix">
                     <h2>Linked Accounts</h2>
                 </header>
@@ -142,7 +142,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
 
 
         </div>
@@ -328,8 +328,12 @@
             <div class="body nopad">
                 <div class="">
                     <div class="row form-line item">
-                        <div class="three columns "><label>Full Name</label></div>
-                        <div class="nine columns "><input id="contact_full_name" type="text" value="<%= user.full_name %>"></div>
+                        <div class="three columns "><label>First Name</label></div>
+                        <div class="nine columns "><input id="contact_first_name" type="text" value="<%= user.first_name %>"></div>
+                    </div>
+                    <div class="row form-line item">
+                        <div class="three columns "><label>Last Name</label></div>
+                        <div class="nine columns "><input id="contact_last_name" type="text" value="<%= user.last_name %>"></div>
                     </div>
                     <div class="row form-line item">
                         <div class="three columns "><label>SSN#</label></div>
@@ -337,7 +341,7 @@
                     </div>
                     <div class="row form-line item">
                         <div class="three columns "><label>Birth date</label></div>
-                        <div class="nine columns "><input id="contact_birth_date" type="text" value="<%= user.birth_date %>"></div>
+                        <div class="nine columns "><input id="contact_birth_date" type="date" value="<%= user.birth_date %>"></div>
                     </div>
                     <div class="row form-line item">
                         <div class="three columns "><label>Phone</label></div>
@@ -350,8 +354,8 @@
                     <div class="row form-line item">
                         <div class="three columns "><label>Address</label></div>
                         <div class="nine columns ">
-                            <input id="contact_address" type="text" value="<%= user.address %>"><br>
-                            <input id="contact_apartment" type="text" value="<%= user.apartment %>"><br>
+                            <input id="contact_address" type="text" value="<%= user.address %>"><br><br>
+                            <!--<input id="contact_apartment" type="text" value="<%= user.apartment %>"><br>-->
                             <input id="contact_city" class="medium" type="text" value="<%= user.city %>">
                             <select id="contact_state" class="tiny">
                                 <option value="" <% if(user.state == "") { %> selected="selected" <% } %>></option>

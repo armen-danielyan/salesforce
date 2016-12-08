@@ -48,7 +48,8 @@ $(document).ready(function () {
             data: {
                 action              : "save_contact_info",
 
-                contact_full_name   : $("#contact_full_name").val(),
+                contact_first_name  : $("#contact_first_name").val(),
+                contact_last_name   : $("#contact_last_name").val(),
                 contact_SSN         : $("#contact_SSN").val(),
                 contact_birth_date  : $("#contact_birth_date").val(),
                 contact_phone       : $("#contact_phone").val(),

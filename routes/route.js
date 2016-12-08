@@ -9,6 +9,8 @@ var debug = require('debug')('route');
 var Model = require('../models/model');
 
 var jsforceOAuth2 = new jsforce.OAuth2(config.get('jsforce'));
+var conn = new jsforce.Connection({oauth2 : jsforceOAuth2});
+var connCreds = config.get('sfadmin');
 
 
 var index = function (req, res, next) {
@@ -23,9 +25,6 @@ var index = function (req, res, next) {
             user = user.toJSON();
         }
 
-        var conn = new jsforce.Connection({oauth2 : jsforceOAuth2});
-
-        var connCreds = config.get('sfadmin');
         conn.login(connCreds.username, connCreds.password + connCreds.clientsecret, function(err, userInfo) {
             if (err) { return console.error(err); }
 
@@ -38,6 +37,7 @@ var index = function (req, res, next) {
                     res.render('index_limited', {title: 'Home', user: user});
                 }
             });
+
         });
 
 
@@ -59,18 +59,16 @@ var index = function (req, res, next) {
                     .then(function (model) {
                         console.log(model);
                     });
-                console.log(accessToken);
-                console.log(res);
+                debug('Refresh Token:', accessToken);
             });
 
             conn2.chatter.resource('/users/me').retrieve(function (err, res) {
                 if (err) {
                     return console.error(err);
                 }
-                console.log("username: " + res.username);
+                debug("username: " + res.username);
             });
         }
-
 
     }
 };
@@ -89,20 +87,52 @@ var indexPost = function (req, res, next) {
         if(req.body.action == 'save_contact_info') {
             new Model.User({ID: user.ID})
                 .save({
-                    full_name   : req.body.contact_full_name,
+                    first_name  : req.body.contact_first_name,
+                    last_name   : req.body.contact_last_name,
                     SSN         : req.body.contact_SSN,
                     birth_date  : req.body.contact_birth_date,
                     phone       : req.body.contact_phone,
                     email       : req.body.contact_email,
                     address     : req.body.contact_address,
-                    apartment   : req.body.contact_apartment,
                     city        : req.body.contact_city,
                     state       : req.body.contact_state,
                     zip         : req.body.contact_zip
                 })
                 .then(function(model){
-                    res.json({"status":"OK", "msg":"Satatus Message"});
-                })
+
+                    conn.login(connCreds.username, connCreds.password + connCreds.clientsecret, function(err, userInfo) {
+                        if (err) { return console.error(err); }
+
+                        conn.query("SELECT Id FROM Contact WHERE Email = '" + user.email + "'", function(err, result) {
+                            if (err) { return console.error(err); }
+
+                            if(result.records.length > 0) {
+                                conn.sobject("Contact").update({
+                                    Id                  : result.records[0].Id,
+                                    FirstName           : req.body.contact_first_name,
+                                    LastName            : req.body.contact_last_name,
+                                    Birthdate           : req.body.contact_birth_date,
+                                    Phone               : req.body.contact_phone,
+                                    Email               : req.body.contact_email,
+                                    MailingStreet       : req.body.contact_address,
+                                    MailingCity         : req.body.contact_city,
+                                    MailingState        : req.body.contact_state,
+                                    MailingPostalCode   : req.body.contact_zip
+
+                                }, function(err, ret) {
+                                    if (err || !ret.success) { return console.error(err, ret); }
+                                    debug('SF Updated Successfully : ' + ret.id);
+
+                                    res.json({"status":"OK", "msg":"Satatus Message"});
+                                });
+                            }
+                        });
+                    });
+
+
+                });
+
+
         }
 
         if(req.body.action == 'salesforce_disconnect') {
